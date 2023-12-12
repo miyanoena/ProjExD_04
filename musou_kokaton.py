@@ -249,6 +249,19 @@ class Score:
         self.image = self.font.render(f"Score: {self.value}", 0, self.color)
         screen.blit(self.image, self.rect)
 
+class Gravity(pg.sprite.Sprite):
+    def __init__(self, life: int):
+        super().__init__()
+        self.life = life
+        self.image = pg.Surface((1600, 900))
+        self.rect = self.image.get_rect()
+        pg.draw.rect(self.image, (0, 0, 0), (0, 0, 1600, 900))
+        self.image.set_alpha(128)
+
+    def update(self):
+        self.life -= 1
+        if self.life < 0:
+            self.kill()
 
 def main():
     pg.display.set_caption("真！こうかとん無双")
@@ -262,6 +275,8 @@ def main():
     exps = pg.sprite.Group()
     emys = pg.sprite.Group()
 
+    gravity = pg.sprite.Group()
+
     tmr = 0
     clock = pg.time.Clock()
     while True:
@@ -271,6 +286,10 @@ def main():
                 return 0
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 beams.add(Beam(bird))
+            #if event.type == pg.KEYDOWN and event.key == pg.K_RETURN and score >= 20:
+            if event.type == pg.KEYDOWN and event.key == pg.K_RETURN and isinstance(score.value, int) and score.value >= 200:
+                gravity.add(Gravity(100))
+                score.value -= 20
         screen.blit(bg_img, [0, 0])
 
         if tmr%200 == 0:  # 200フレームに1回，敵機を出現させる
@@ -289,6 +308,15 @@ def main():
         for bomb in pg.sprite.groupcollide(bombs, beams, True, True).keys():
             exps.add(Explosion(bomb, 50))  # 爆発エフェクト
             score.value += 1  # 1点アップ
+        
+        for bomb in pg.sprite.groupcollide(bombs, gravity, True, False):
+            exps.add(Explosion(bomb, 50))
+            score.value += 1
+        
+        for emy in pg.sprite.groupcollide(gravity, beams, True, False):
+            exps.add(Explosion(emy, 100))  # 爆発エフェクト
+            score.value += 1 
+            bird.change_img(6, screen) 
 
         if len(pg.sprite.spritecollide(bird, bombs, True)) != 0:
             bird.change_img(8, screen) # こうかとん悲しみエフェクト
@@ -307,6 +335,8 @@ def main():
         exps.update()
         exps.draw(screen)
         score.update(screen)
+        gravity.update()
+        gravity.draw(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
