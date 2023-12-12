@@ -6,8 +6,8 @@ import time
 import pygame as pg
 
 
-WIDTH = 1300  # ゲームウィンドウの幅
-HEIGHT = 600  # ゲームウィンドウの高さ
+WIDTH = 1600  # ゲームウィンドウの幅
+HEIGHT = 900  # ゲームウィンドウの高さ
 MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
 
 
@@ -88,7 +88,7 @@ class Bird(pg.sprite.Sprite):
         引数1 key_lst：押下キーの真理値リスト
         引数2 screen：画面Surface
         """
-        
+
         if key_lst[pg.K_LSHIFT]:
             self.speed = 20
         else:
