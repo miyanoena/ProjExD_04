@@ -431,9 +431,9 @@ def main():
         if len(pg.sprite.spritecollide(bird, bombs, True)) != 0:
 
        
-        for bomb in pg.sprite.spritecollide(bird, bombs, True):
-            if bomb.state == "inactive":
-                continue
+            for bomb in pg.sprite.spritecollide(bird, bombs, True):
+                if bomb.state == "inactive":
+                    continue
 
             bird.change_img(8, screen) # こうかとん悲しみエフェクト
             score.update(screen)
