@@ -273,7 +273,7 @@ def main():
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 beams.add(Beam(bird))
             if event.type == pg.KEYDOWN and event.key == pg.K_RSHIFT:
-                if score.value > -1000:
+                if score.value > 100:
                     bird.state = "hyper"
                     bird.hyper_life = 500
                     score.value -= 100
@@ -298,7 +298,7 @@ def main():
         
         for bomb in pg.sprite.spritecollide(bird, bombs, True):
             if bird.state == "normal":
-                bird.change_img(9, screen)
+                bird.change_img(8, screen)
                 score.update(screen)
                 pg.display.update()
                 time.sleep(2)
